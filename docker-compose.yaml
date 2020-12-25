@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:12
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: s3cret
+    ports:
+      - "5432:5432"
+
+  tryton:
+    image: palibaya/tryton:5.8-2
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      TRYTOND_DATABASE__HOST: postgres
+      TRYTOND_DATABASE__PASSWORD: s3cret
+      TRYTOND_DATABASE__NAME: postgres
+      TRYTOND_ADMIN_PASSWORD: admin1234
+
+volumes:
+  db-data:
+
